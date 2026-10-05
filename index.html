@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#1d4fd7">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Música iPod</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f2f5f9; --surface:#ffffff; --ink:#15202e; --muted:#586577; --line:#d8dee8;
+  --accent:#1d4fd7; --accent-ink:#ffffff; --accent-soft:#e6ecfc;
+  --ok:#1b7a4b; --ok-bg:#e3f4ea; --warn:#8f5200; --warn-bg:#fff0d1; --bad:#b0231b; --bad-bg:#fde6e3;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f141b; --surface:#171e28; --ink:#e8edf4; --muted:#98a4b5; --line:#2a3443;
+    --accent:#7b9bff; --accent-ink:#0d1420; --accent-soft:#1d2840;
+    --ok:#5fd39a; --ok-bg:#12301f; --warn:#f2b45a; --warn-bg:#3a2b10; --bad:#ff8a80; --bad-bg:#3a1715;
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);-webkit-text-size-adjust:100%}
+body{font-family:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.4;font-variant-numeric:tabular-nums}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+h1,h2,p{margin:0}
+
+.wrap{max-width:640px;margin:0 auto;padding:max(24px,env(safe-area-inset-top)) 16px max(32px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:16px}
+.h1{font-size:30px;line-height:1.1;font-weight:700;letter-spacing:-.02em}
+.sub{margin-top:6px;color:var(--muted)}
+.h2{font-size:18px;font-weight:700;letter-spacing:-.01em}
+.muted{color:var(--muted)}
+
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi b{display:block;font-size:28px;font-weight:700;color:var(--accent);line-height:1.1}
+.kpi span{font-size:13px;color:var(--muted)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+
+label{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600}
+textarea,input[type=text]{width:100%;min-height:46px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-weight:400}
+textarea{min-height:110px;resize:vertical}
+textarea::placeholder,input::placeholder{color:var(--muted)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 18px;border:0;border-radius:10px;background:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn.alt{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.btn.quiet{background:transparent;color:var(--muted);min-height:40px;padding:0 10px;font-weight:500}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.row .btn{flex:1 1 180px}
+
+.msg{font-size:14px;border-radius:10px;padding:10px 12px}
+.msg.ok{background:var(--ok-bg);color:var(--ok)}
+.msg.warn{background:var(--warn-bg);color:var(--warn)}
+.msg.bad{background:var(--bad-bg);color:var(--bad)}
+
+.list{display:flex;flex-direction:column}
+.item{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.item .info{flex:1;min-width:0}
+.item .t{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .u{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag{font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--warn-bg);color:var(--warn);flex:none}
+.x{flex:none;width:40px;height:40px;border:0;border-radius:10px;background:transparent;color:var(--muted);font-size:20px;line-height:1}
+.x:hover{background:var(--bad-bg);color:var(--bad)}
+.empty{padding:6px 0;color:var(--muted)}
+
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.step{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:10px;cursor:pointer}
+.step:hover{background:var(--accent-soft)}
+.step input{flex:none;width:22px;height:22px;margin:1px 0 0;accent-color:var(--accent)}
+.step.done .st{color:var(--muted);text-decoration:line-through}
+.st b{display:block;font-weight:600}
+.st span{font-size:14px;color:var(--muted)}
+.bar{height:8px;border-radius:99px;background:var(--accent-soft);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .2s}
+.foot{font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <header>
+    <h1 class="h1">Música iPod</h1>
+    <p class="sub">Pega enlaces de YouTube Music, descarga el archivo y sigue los pasos.</p>
+  </header>
+
+  <section class="kpis" aria-label="Resumen">
+    <div class="kpi"><b id="kCount">0</b><span>Canciones en la lista</span></div>
+    <div class="kpi"><b id="kSize">0 MB</b><span>Espacio aprox. de 8 GB</span></div>
+  </section>
+
+  <section class="card" aria-labelledby="addT">
+    <h2 class="h2" id="addT">Añadir canciones</h2>
+    <label>Enlaces (uno por línea)
+      <textarea id="links" placeholder="https://music.youtube.com/watch?v=..." spellcheck="false" autocomplete="off"></textarea>
+    </label>
+    <label>Lista del iPod donde las vas a guardar
+      <input type="text" id="dest" value="Correr" autocomplete="off">
+    </label>
+    <button class="btn" id="add" type="button">Añadir a la lista</button>
+    <div class="msg" id="msg" role="status" hidden></div>
+  </section>
+
+  <section class="card" aria-labelledby="listT">
+    <div class="card-head">
+      <h2 class="h2" id="listT">Lista de esta tanda</h2>
+      <button class="btn quiet" id="clear" type="button">Vaciar lista</button>
+    </div>
+    <div class="list" id="list"></div>
+  </section>
+
+  <section class="card" aria-labelledby="dlT">
+    <h2 class="h2" id="dlT">Descargar</h2>
+    <p class="muted">Crea un <b>musica.bat</b> con tus enlaces. Al abrirlo en el ordenador, baja los MP3 a la carpeta <b>Musica iPod\MP3</b> del Escritorio.</p>
+    <div class="row">
+      <button class="btn" id="dlBat" type="button">Descargar musica.bat</button>
+      <button class="btn alt" id="copy" type="button">Copiar enlaces</button>
+    </div>
+    <p class="foot">Si Windows o el navegador avisan de que el archivo puede ser peligroso, elige “Conservar”: es solo texto con tus enlaces.</p>
+  </section>
+
+  <section class="card" aria-labelledby="stepsT">
+    <div class="card-head">
+      <h2 class="h2" id="stepsT">Pasos</h2>
+      <span class="muted" id="prog">0 de 5</span>
+    </div>
+    <div class="bar" aria-hidden="true"><i id="barFill"></i></div>
+    <ul class="steps" id="steps"></ul>
+    <button class="btn alt" id="reset" type="button">Empezar una tanda nueva</button>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  var KEY = "musicaIpod.v1";
+  var state = { items: [], dest: "Correr", checks: [false,false,false,false,false] };
+
+  function load(){
+    try{
+      var raw = localStorage.getItem(KEY);
+      if(raw){
+        var s = JSON.parse(raw);
+        if(s && Array.isArray(s.items)) state.items = s.items;
+        if(s && typeof s.dest === "string" && s.dest.trim()) state.dest = s.dest;
+        if(s && Array.isArray(s.checks) && s.checks.length === 5) state.checks = s.checks;
+      }
+    }catch(e){}
+  }
+  function save(){
+    try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+  }
+
+  var $ = function(id){ return document.getElementById(id); };
+  var elLinks=$("links"), elDest=$("dest"), elMsg=$("msg"), elList=$("list");
+
+  /* ---------- enlaces ---------- */
+  function parseLink(text){
+    var u;
+    try{ u = new URL(text); }catch(e){ return null; }
+    var h = u.hostname.replace(/^www\./,"").replace(/^m\./,"");
+    var id;
+    if(h === "youtu.be"){
+      id = u.pathname.slice(1).split("/")[0];
+      if(id) return { type:"song", id:id, url:"https://music.youtube.com/watch?v="+encodeURIComponent(id) };
+      return null;
+    }
+    if(h === "youtube.com" || h === "music.youtube.com"){
+      var v = u.searchParams.get("v"), l = u.searchParams.get("list");
+      if(u.pathname === "/watch" && v) return { type:"song", id:v, url:"https://music.youtube.com/watch?v="+encodeURIComponent(v) };
+      if(u.pathname === "/playlist" && l) return { type:"list", id:l, url:"https://music.youtube.com/playlist?list="+encodeURIComponent(l) };
+    }
+    return null;
+  }
+
+  function showMsg(kind, text){
+    elMsg.className = "msg " + kind;
+    elMsg.textContent = text;
+    elMsg.hidden = false;
+  }
+
+  function addLinks(){
+    var parts = elLinks.value.split(/\s+/).filter(Boolean);
+    if(!parts.length){ showMsg("warn","Pega al menos un enlace en el campo."); return; }
+    var added = [], dup = 0, bad = 0;
+    parts.forEach(function(p){
+      var r = parseLink(p);
+      if(!r){ bad++; return; }
+      var exists = state.items.some(function(it){ return it.id === r.id && it.type === r.type; });
+      if(exists){ dup++; return; }
+      r.name = "";
+      state.items.push(r);
+      added.push(r);
+    });
+    state.dest = elDest.value.trim() || "Correr";
+    save();
+    elLinks.value = "";
+    render();
+    added.forEach(fetchTitle);
+    var bits = [];
+    if(added.length) bits.push(added.length + (added.length===1 ? " añadida" : " añadidas"));
+    if(dup) bits.push(dup + (dup===1 ? " repetida (ignorada)" : " repetidas (ignoradas)"));
+    if(bad) bits.push(bad + (bad===1 ? " enlace no válido" : " enlaces no válidos"));
+    showMsg(bad && !added.length ? "bad" : (bad||dup ? "warn" : "ok"), bits.join(" · ") + (bad ? ". Copia el enlace desde YouTube Music con “Compartir”." : "."));
+  }
+
+  function fetchTitle(it){
+    if(it.type !== "song" || typeof fetch !== "function") return;
+    var api = "https://noembed.com/embed?url=" + encodeURIComponent("https://www.youtube.com/watch?v=" + it.id);
+    fetch(api).then(function(r){ return r.json(); }).then(function(d){
+      if(d && d.title){
+        var target = state.items.filter(function(x){ return x.id === it.id && x.type === it.type; })[0];
+        if(target && !target.name){ target.name = d.title; save(); render(); }
+      }
+    }).catch(function(){});
+  }
+
+  /* ---------- pintar ---------- */
+  function render(){
+    var n = state.items.length;
+    $("kCount").textContent = n;
+    var mb = n * 5;
+    $("kSize").textContent = mb >= 1000 ? (mb/1000).toFixed(1) + " GB" : mb + " MB";
+    elDest.value = state.dest;
+
+    elList.textContent = "";
+    if(!n){
+      var e = document.createElement("p");
+      e.className = "empty";
+      e.textContent = "Aún no hay canciones. Pega enlaces arriba y pulsa “Añadir a la lista”.";
+      elList.appendChild(e);
+    } else {
+      state.items.forEach(function(it, i){
+        var row = document.createElement("div"); row.className = "item";
+        var info = document.createElement("div"); info.className = "info";
+        var t = document.createElement("div"); t.className = "t";
+        t.textContent = it.name || (it.type === "list" ? "Lista completa" : "Canción " + it.id);
+        var u = document.createElement("div"); u.className = "u"; u.textContent = it.url;
+        info.appendChild(t); info.appendChild(u);
+        row.appendChild(info);
+        if(it.type === "list"){
+          var tag = document.createElement("span"); tag.className = "tag"; tag.textContent = "Lista completa";
+          row.appendChild(tag);
+        }
+        var x = document.createElement("button");
+        x.type = "button"; x.className = "x"; x.textContent = "×";
+        x.setAttribute("aria-label","Quitar de la lista");
+        x.addEventListener("click", function(){ state.items.splice(i,1); save(); render(); });
+        row.appendChild(x);
+        elList.appendChild(row);
+      });
+    }
+    $("clear").hidden = !n;
+    $("dlBat").disabled = !n;
+    $("copy").disabled = !n;
+    renderSteps();
+  }
+
+  function stepsData(){
+    var d = state.dest || "Correr";
+    return [
+      ["Añade los enlaces y descarga musica.bat", "Arriba, en “Añadir canciones” y luego en “Descargar”."],
+      ["Haz doble clic en musica.bat", "Vale desde la carpeta Descargas. Espera a que ponga “Terminado” y pulsa una tecla."],
+      ["Pásalas a iTunes", "Archivo → Añadir carpeta a la biblioteca → Musica iPod → MP3."],
+      ["Arrástralas al iPod", "Conecta el iPod. En “Añadido recientemente”, selecciónalas y suéltalas en “" + d + "”. Después pulsa Expulsar."],
+      ["Limpia la tanda", "Doble clic en limpiar.bat y escribe S. Luego vacía la lista de esta página."]
+    ];
+  }
+
+  function renderSteps(){
+    var ul = $("steps"); ul.textContent = "";
+    var done = 0;
+    stepsData().forEach(function(s, i){
+      var li = document.createElement("li");
+      var lab = document.createElement("label");
+      lab.className = "step" + (state.checks[i] ? " done" : "");
+      var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!state.checks[i];
+      cb.addEventListener("change", function(){ state.checks[i] = cb.checked; save(); renderSteps(); });
+      var st = document.createElement("div"); st.className = "st";
+      var b = document.createElement("b"); b.textContent = s[0];
+      var sp = document.createElement("span"); sp.textContent = s[1];
+      st.appendChild(b); st.appendChild(sp);
+      lab.appendChild(cb); lab.appendChild(st);
+      li.appendChild(lab); ul.appendChild(li);
+      if(state.checks[i]) done++;
+    });
+    $("prog").textContent = done + " de 5";
+    $("barFill").style.width = (done/5*100) + "%";
+  }
+
+  /* ---------- salida ---------- */
+  function buildBat(){
+    var songs = state.items.filter(function(i){ return i.type === "song"; });
+    var lists = state.items.filter(function(i){ return i.type === "list"; });
+    var opts = '-i -x --audio-format mp3 --audio-quality 0 --embed-metadata -o "%OUT%\\%%(title)s.%%(ext)s"';
+    var L = [];
+    L.push("@echo off");
+    L.push('for /f "delims=" %%D in (\'powershell -nologo -command "[Environment]::GetFolderPath(\'Desktop\')"\') do set "DESK=%%D"');
+    L.push('set "OUT=%DESK%\\Musica iPod\\MP3"');
+    L.push('if not exist "%OUT%" mkdir "%OUT%"');
+    L.push("echo Descargando " + state.items.length + (state.items.length === 1 ? " elemento..." : " elementos..."));
+    L.push("echo.");
+    if(songs.length){
+      L.push("yt-dlp --no-playlist " + opts + " " + songs.map(function(s){ return '"' + s.url + '"'; }).join(" "));
+    }
+    lists.forEach(function(l){
+      L.push("yt-dlp " + opts + ' "' + l.url + '"');
+    });
+    L.push("echo.");
+    L.push("echo Terminado. Mira la carpeta MP3 en Musica iPod.");
+    L.push("pause");
+    return L.join("\r\n") + "\r\n";
+  }
+
+  function download(name, text){
+    var blob = new Blob([text], { type:"application/octet-stream" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1500);
+  }
+
+  function copyText(text){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function(res, rej){
+      var ta = document.createElement("textarea"); ta.value = text;
+      ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand("copy") ? res() : rej(); }catch(e){ rej(e); }
+      ta.remove();
+    });
+  }
+
+  /* ---------- eventos ---------- */
+  $("add").addEventListener("click", addLinks);
+  elDest.addEventListener("change", function(){ state.dest = elDest.value.trim() || "Correr"; save(); renderSteps(); });
+  elDest.addEventListener("input", function(){ state.dest = elDest.value.trim() || "Correr"; renderSteps(); });
+
+  $("clear").addEventListener("click", function(){
+    if(confirm("¿Vaciar la lista de canciones?")){ state.items = []; save(); render(); elMsg.hidden = true; }
+  });
+
+  $("dlBat").addEventListener("click", function(){
+    if(!state.items.length) return;
+    download("musica.bat", buildBat());
+    state.checks[0] = true; save(); renderSteps();
+    showMsg("ok","Descargado musica.bat. Ábrelo con doble clic desde la carpeta Descargas.");
+  });
+
+  $("copy").addEventListener("click", function(){
+    var txt = state.items.map(function(i){ return i.url; }).join("\n");
+    copyText(txt).then(function(){ showMsg("ok","Enlaces copiados. Pégalos en enlaces.txt si prefieres el método anterior."); })
+      .catch(function(){ showMsg("bad","No se pudo copiar. Usa “Descargar musica.bat”."); });
+  });
+
+  $("reset").addEventListener("click", function(){
+    if(confirm("¿Empezar una tanda nueva? Se vacía la lista y los pasos.")){
+      state.items = []; state.checks = [false,false,false,false,false]; save(); render(); elMsg.hidden = true;
+      window.scrollTo({ top:0 });
+    }
+  });
+
+  load();
+  render();
+  // recupera títulos que faltaban
+  state.items.forEach(function(it){ if(!it.name) fetchTitle(it); });
+})();
+</script>
+</body>
+</html>
