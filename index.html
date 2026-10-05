@@ -8,6 +8,12 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Música iPod</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTcO6c2ljYSBpUG9kIiwic2hvcnRfbmFtZSI6Ik3DunNpY2EgaVBvZCIsImlkIjoiaHR0cHM6Ly9jaGljb2FsbWVpZGFiYi5naXRodWIuaW8vTXVzaWNhLyIsInN0YXJ0X3VybCI6Imh0dHBzOi8vY2hpY29hbG1laWRhYmIuZ2l0aHViLmlvL011c2ljYS8iLCJzY29wZSI6Imh0dHBzOi8vY2hpY29hbG1laWRhYmIuZ2l0aHViLmlvL011c2ljYS8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZjJmNWY5IiwidGhlbWVfY29sb3IiOiIjMWQ0ZmQ3IiwiaWNvbnMiOlt7InNyYyI6Imh0dHBzOi8vY2hpY29hbG1laWRhYmIuZ2l0aHViLmlvL011c2ljYS9pY29uLTE5Mi5wbmciLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2UvcG5nIiwicHVycG9zZSI6ImFueSBtYXNrYWJsZSJ9LHsic3JjIjoiaHR0cHM6Ly9jaGljb2FsbWVpZGFiYi5naXRodWIuaW8vTXVzaWNhL2ljb24tNTEyLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmciLCJwdXJwb3NlIjoiYW55IG1hc2thYmxlIn1dfQ==">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<script>window.__ip=null;
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__ip=e;document.querySelectorAll("[data-install]").forEach(function(b){b.hidden=false;});});
+window.addEventListener("appinstalled",function(){window.__ip=null;document.querySelectorAll("[data-install]").forEach(function(b){b.hidden=true;});});</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -94,6 +100,7 @@ textarea::placeholder,input::placeholder{color:var(--muted)}
   <header>
     <h1 class="h1">Música iPod</h1>
     <p class="sub">Pega enlaces de YouTube Music, descarga el archivo y sigue los pasos.</p>
+    <button class="btn alt" id="install" data-install hidden type="button" style="margin-top:12px">Instalar app</button>
   </header>
 
   <section class="kpis" aria-label="Resumen">
@@ -373,6 +380,10 @@ textarea::placeholder,input::placeholder{color:var(--muted)}
       state.items = []; state.checks = [false,false,false,false,false]; save(); render(); elMsg.hidden = true;
       window.scrollTo({ top:0 });
     }
+  });
+
+  $("install").addEventListener("click", function(){
+    if(window.__ip){ window.__ip.prompt(); }
   });
 
   load();
