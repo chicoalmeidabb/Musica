@@ -107,6 +107,9 @@ dialog.help::backdrop{background:rgba(0,0,0,.55)}
 .help-body code{background:var(--accent-soft);padding:1px 6px;border-radius:6px;font-size:14px}
 .ytlink{flex:none;display:inline-flex;align-items:center;min-height:40px;padding:0 12px;border:1px solid var(--accent);border-radius:10px;color:var(--accent);font-size:14px;font-weight:600;text-decoration:none}
 .ytlink:hover{background:var(--accent-soft)}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 8px 44px}
+.btn.sm{min-height:40px;padding:0 14px;font-size:14px}
+a.btn{text-decoration:none}
 .help-body a{color:var(--accent);text-decoration:underline}
 .help-note{margin-top:14px;padding:10px 12px;border-radius:10px;background:var(--warn-bg);color:var(--warn);font-size:14px}
 </style>
@@ -115,7 +118,7 @@ dialog.help::backdrop{background:rgba(0,0,0,.55)}
 <main class="wrap">
 
   <header>
-    <div class="brand"><img class="logo" src="icon-192.png" alt="" width="56" height="56"><div><h1 class="h1">Música iPod</h1><span class="ver" id="ver">v1.4</span></div><button class="helpbtn" id="helpBtn" type="button" aria-haspopup="dialog">Ayuda</button></div>
+    <div class="brand"><img class="logo" src="icon-192.png" alt="" width="56" height="56"><div><h1 class="h1">Música iPod</h1><span class="ver" id="ver">v1.6</span></div><button class="helpbtn" id="helpBtn" type="button" aria-haspopup="dialog">Ayuda</button></div>
     <p class="sub">Pega enlaces de YouTube Music, descarga el archivo y sigue los pasos.</p>
     <button class="btn alt" id="install" data-install hidden type="button" style="margin-top:12px">Instalar app</button>
   </header>
@@ -148,16 +151,6 @@ dialog.help::backdrop{background:rgba(0,0,0,.55)}
     <div class="list" id="list"></div>
   </section>
 
-  <section class="card" aria-labelledby="dlT">
-    <h2 class="h2" id="dlT">Descargar</h2>
-    <p class="muted">Crea un <b>musica.bat</b> con tus enlaces. Al abrirlo en el ordenador, baja los MP3 a la carpeta <b>Musica iPod\MP3</b> del Escritorio.</p>
-    <div class="row">
-      <button class="btn" id="dlBat" type="button">Descargar musica.bat</button>
-      <button class="btn alt" id="copy" type="button">Copiar enlaces</button>
-    </div>
-    <p class="foot">Si Windows o el navegador avisan de que el archivo puede ser peligroso, elige “Conservar”: es solo texto con tus enlaces.</p>
-  </section>
-
   <section class="card" aria-labelledby="stepsT">
     <div class="card-head">
       <h2 class="h2" id="stepsT">Pasos</h2>
@@ -180,14 +173,14 @@ dialog.help::backdrop{background:rgba(0,0,0,.55)}
     <ol>
       <li>Abre <a href="https://music.youtube.com" target="_blank" rel="noopener noreferrer"><b>YouTube Music</b></a>, busca la canción, pulsa <b>Compartir</b> y copia el enlace.</li>
       <li>Vuelve aquí y pégalo en <b>Añadir canciones</b> (uno por línea). Pulsa <b>Añadir a la lista</b>.</li>
-      <li>Pulsa <b>Descargar musica.bat</b> y elige <b>Conservar</b> si Chrome avisa.</li>
+      <li>En el paso 2, pulsa <b>Descargar musica.bat</b> y elige <b>Conservar</b> si Chrome avisa.</li>
       <li>En <b>Descargas</b>, haz doble clic en el <code>musica.bat</code> nuevo.</li>
       <li>Espera a que ponga <b>“Terminado”</b> y pulsa una tecla.</li>
       <li>Conecta el iPod y abre <b>iTunes</b>.</li>
       <li><b>Archivo → Añadir carpeta a la biblioteca</b> → <code>Musica iPod</code> → <code>MP3</code>.</li>
       <li>En <b>Añadido recientemente</b>, selecciona las canciones nuevas y <b>arrástralas a Correr</b>.</li>
       <li>Pulsa <b>Expulsar</b> (el triángulo) y desenchufa el iPod.</li>
-      <li>Doble clic en <code>limpiar.bat</code> (en <code>Musica iPod</code>) y escribe <b>S</b>.</li>
+      <li>En el paso 5, pulsa <b>Descargar limpiar.bat</b>, haz doble clic y escribe <b>S</b>.</li>
       <li>Aquí, pulsa <b>Empezar una tanda nueva</b>.</li>
     </ol>
     <h3>Consejos</h3>
@@ -197,7 +190,7 @@ dialog.help::backdrop{background:rgba(0,0,0,.55)}
       <li>Si la ventana negra da un error, haz una foto y pregunta.</li>
     </ul>
     <p class="help-note">No ejecutes <b>limpiar.bat</b> antes de terminar de arrastrar las canciones al iPod, o las perderás.</p>
-    <p class="foot" style="margin-top:14px">Música iPod v1.4</p>
+    <p class="foot" style="margin-top:14px">Música iPod v1.6</p>
   </div>
 </dialog>
 
@@ -264,6 +257,7 @@ dialog.help::backdrop{background:rgba(0,0,0,.55)}
       added.push(r);
     });
     state.dest = elDest.value.trim() || "Correr";
+    if(added.length) state.checks[0] = true;
     save();
     elLinks.value = "";
     render();
@@ -322,19 +316,37 @@ dialog.help::backdrop{background:rgba(0,0,0,.55)}
       });
     }
     $("clear").hidden = !n;
-    $("dlBat").disabled = !n;
-    $("copy").disabled = !n;
     renderSteps();
   }
 
   function stepsData(){
     var d = state.dest || "Correr";
+    var has = state.items.length > 0;
     return [
-      ["Añade los enlaces y descarga musica.bat", "Arriba, en “Añadir canciones” y luego en “Descargar”."],
-      ["Haz doble clic en musica.bat", "Vale desde la carpeta Descargas. Espera a que ponga “Terminado” y pulsa una tecla."],
-      ["Pásalas a iTunes", "Archivo → Añadir carpeta a la biblioteca → Musica iPod → MP3."],
-      ["Arrástralas al iPod", "Conecta el iPod. En “Añadido recientemente”, selecciónalas y suéltalas en “" + d + "”. Después pulsa Expulsar."],
-      ["Limpia la tanda", "Doble clic en limpiar.bat y escribe S. Luego vacía la lista de esta página."]
+      { t:"Pega el enlace de YouTube Music",
+        s:"Copia el enlace de la canción y pégalo arriba, en “Añadir canciones”.",
+        acts:[ { label:"Abrir YouTube Music ↗", href:"https://music.youtube.com" } ] },
+      { t:"Descarga musica.bat",
+        s:"Se crea con tus enlaces. Si el navegador avisa, elige “Conservar”.",
+        acts:[ { label:"Descargar musica.bat", primary:true, disabled:!has, done:true, fn:function(){
+                  download("musica.bat", buildBat());
+                  showMsg("ok","Descargado musica.bat. Ábrelo con doble clic desde la carpeta Descargas."); } },
+               { label:"Copiar enlaces", quiet:true, disabled:!has, fn:function(){
+                  copyText(state.items.map(function(i){ return i.url; }).join("\n"))
+                    .then(function(){ showMsg("ok","Enlaces copiados."); })
+                    .catch(function(){ showMsg("bad","No se pudo copiar."); }); } } ] },
+      { t:"Haz doble clic en musica.bat",
+        s:"Búscalo en Descargas. Espera a que ponga “Terminado”: se abrirán solas la carpeta MP3 e iTunes.",
+        acts:[ { label:"Ya ha terminado", done:true, fn:function(){} } ] },
+      { t:"Pásalas al iPod",
+        s:"En iTunes: Archivo → Añadir carpeta a la biblioteca → Musica iPod → MP3. Después, en “Añadido recientemente”, arrástralas a “" + d + "” y pulsa Expulsar.",
+        acts:[ { label:"Abrir iTunes", href:"itunes://" },
+               { label:"Ya están en el iPod", done:true, fn:function(){} } ] },
+      { t:"Limpia la tanda",
+        s:"Descarga limpiar.bat, haz doble clic y escribe S. Después empieza una tanda nueva.",
+        acts:[ { label:"Descargar limpiar.bat", done:true, fn:function(){
+                  download("limpiar.bat", buildCleanBat());
+                  showMsg("ok","Descargado limpiar.bat. Ábrelo con doble clic desde Descargas."); } } ] }
     ];
   }
 
@@ -348,11 +360,30 @@ dialog.help::backdrop{background:rgba(0,0,0,.55)}
       var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!state.checks[i];
       cb.addEventListener("change", function(){ state.checks[i] = cb.checked; save(); renderSteps(); });
       var st = document.createElement("div"); st.className = "st";
-      var b = document.createElement("b"); b.textContent = s[0];
-      var sp = document.createElement("span"); sp.textContent = s[1];
+      var b = document.createElement("b"); b.textContent = (i+1) + ". " + s.t;
+      var sp = document.createElement("span"); sp.textContent = s.s;
       st.appendChild(b); st.appendChild(sp);
       lab.appendChild(cb); lab.appendChild(st);
-      li.appendChild(lab); ul.appendChild(li);
+      li.appendChild(lab);
+      var acts = document.createElement("div"); acts.className = "acts";
+      s.acts.forEach(function(a){
+        var el;
+        if(a.href){
+          el = document.createElement("a");
+          el.href = a.href; el.target = "_blank"; el.rel = "noopener noreferrer";
+        } else {
+          el = document.createElement("button"); el.type = "button"; el.disabled = !!a.disabled;
+        }
+        el.className = "btn sm" + (a.primary ? "" : (a.quiet ? " quiet" : " alt"));
+        el.textContent = a.label;
+        el.addEventListener("click", function(){
+          if(a.fn) a.fn();
+          if(a.done){ state.checks[i] = true; save(); renderSteps(); }
+        });
+        acts.appendChild(el);
+      });
+      li.appendChild(acts);
+      ul.appendChild(li);
       if(state.checks[i]) done++;
     });
     $("prog").textContent = done + " de 5";
@@ -360,15 +391,20 @@ dialog.help::backdrop{background:rgba(0,0,0,.55)}
   }
 
   /* ---------- salida ---------- */
+  function deskLines(){
+    return [
+      '@echo off',
+      'for /f "delims=" %%D in (\'powershell -nologo -command "[Environment]::GetFolderPath(\'Desktop\')"\') do set "DESK=%%D"',
+      'set "OUT=%DESK%\\Musica iPod\\MP3"',
+      'if not exist "%OUT%" mkdir "%OUT%"'
+    ];
+  }
+
   function buildBat(){
     var songs = state.items.filter(function(i){ return i.type === "song"; });
     var lists = state.items.filter(function(i){ return i.type === "list"; });
     var opts = '-i -x --audio-format mp3 --audio-quality 0 --embed-metadata -o "%OUT%\\%%(title)s.%%(ext)s"';
-    var L = [];
-    L.push("@echo off");
-    L.push('for /f "delims=" %%D in (\'powershell -nologo -command "[Environment]::GetFolderPath(\'Desktop\')"\') do set "DESK=%%D"');
-    L.push('set "OUT=%DESK%\\Musica iPod\\MP3"');
-    L.push('if not exist "%OUT%" mkdir "%OUT%"');
+    var L = deskLines();
     L.push("echo Descargando " + state.items.length + (state.items.length === 1 ? " elemento..." : " elementos..."));
     L.push("echo.");
     if(songs.length){
@@ -378,7 +414,21 @@ dialog.help::backdrop{background:rgba(0,0,0,.55)}
       L.push("yt-dlp " + opts + ' "' + l.url + '"');
     });
     L.push("echo.");
-    L.push("echo Terminado. Mira la carpeta MP3 en Musica iPod.");
+    L.push("echo Terminado. Abriendo la carpeta MP3 e iTunes...");
+    L.push('start "" "%OUT%"');
+    L.push('if exist "%ProgramFiles%\\iTunes\\iTunes.exe" start "" "%ProgramFiles%\\iTunes\\iTunes.exe"');
+    L.push("pause");
+    return L.join("\r\n") + "\r\n";
+  }
+
+  function buildCleanBat(){
+    var L = deskLines();
+    L.push("echo Se van a borrar todos los MP3 de la carpeta MP3 de Musica iPod.");
+    L.push('choice /c SN /m "Seguro que quieres borrar"');
+    L.push("if errorlevel 2 exit /b");
+    L.push('del /q "%OUT%\\*.*"');
+    L.push("echo.");
+    L.push("echo Hecho. La carpeta MP3 esta vacia.");
     L.push("pause");
     return L.join("\r\n") + "\r\n";
   }
@@ -406,25 +456,29 @@ dialog.help::backdrop{background:rgba(0,0,0,.55)}
   }
 
   /* ---------- eventos ---------- */
+  /* al pegar un enlace, pasa solo a la línea siguiente */
+  elLinks.addEventListener("paste", function(e){
+    var cd = e.clipboardData || window.clipboardData;
+    var t = cd ? cd.getData("text") : "";
+    if(!t || !t.trim()) return;
+    e.preventDefault();
+    var txt = t.trim().split(/\s+/).join("\n");
+    var v = elLinks.value, a = elLinks.selectionStart, b = elLinks.selectionEnd;
+    var before = v.slice(0, a), after = v.slice(b);
+    if(before && !/\n$/.test(before)) txt = "\n" + txt;
+    txt += "\n";
+    elLinks.value = before + txt + after;
+    var pos = (before + txt).length;
+    elLinks.setSelectionRange(pos, pos);
+    elLinks.scrollTop = elLinks.scrollHeight;
+  });
+
   $("add").addEventListener("click", addLinks);
   elDest.addEventListener("change", function(){ state.dest = elDest.value.trim() || "Correr"; save(); renderSteps(); });
   elDest.addEventListener("input", function(){ state.dest = elDest.value.trim() || "Correr"; renderSteps(); });
 
   $("clear").addEventListener("click", function(){
     if(confirm("¿Vaciar la lista de canciones?")){ state.items = []; save(); render(); elMsg.hidden = true; }
-  });
-
-  $("dlBat").addEventListener("click", function(){
-    if(!state.items.length) return;
-    download("musica.bat", buildBat());
-    state.checks[0] = true; save(); renderSteps();
-    showMsg("ok","Descargado musica.bat. Ábrelo con doble clic desde la carpeta Descargas.");
-  });
-
-  $("copy").addEventListener("click", function(){
-    var txt = state.items.map(function(i){ return i.url; }).join("\n");
-    copyText(txt).then(function(){ showMsg("ok","Enlaces copiados. Pégalos en enlaces.txt si prefieres el método anterior."); })
-      .catch(function(){ showMsg("bad","No se pudo copiar. Usa “Descargar musica.bat”."); });
   });
 
   $("reset").addEventListener("click", function(){
