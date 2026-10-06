@@ -95,13 +95,24 @@ textarea::placeholder,input::placeholder{color:var(--muted)}
 .bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .2s}
 .foot{font-size:13px;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+
+.helpbtn{margin-left:auto;flex:none;min-height:40px;padding:0 14px;border:1px solid var(--accent);border-radius:10px;background:transparent;color:var(--accent);font-weight:600}
+dialog.help{width:min(600px,calc(100vw - 24px));max-height:88vh;padding:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);overflow:hidden}
+dialog.help::backdrop{background:rgba(0,0,0,.55)}
+.help-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.help-body{padding:6px 18px 20px;overflow-y:auto;max-height:calc(88vh - 70px)}
+.help-body h3{margin:18px 0 8px;font-size:16px;font-weight:700;color:var(--accent)}
+.help-body ol,.help-body ul{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px}
+.help-body li{line-height:1.4}
+.help-body code{background:var(--accent-soft);padding:1px 6px;border-radius:6px;font-size:14px}
+.help-note{margin-top:14px;padding:10px 12px;border-radius:10px;background:var(--warn-bg);color:var(--warn);font-size:14px}
 </style>
 </head>
 <body>
 <main class="wrap">
 
   <header>
-    <div class="brand"><img class="logo" src="icon-192.png" alt="" width="56" height="56"><div><h1 class="h1">Música iPod</h1><span class="ver" id="ver">v1.1</span></div></div>
+    <div class="brand"><img class="logo" src="icon-192.png" alt="" width="56" height="56"><div><h1 class="h1">Música iPod</h1><span class="ver" id="ver">v1.2</span></div><button class="helpbtn" id="helpBtn" type="button" aria-haspopup="dialog">Ayuda</button></div>
     <p class="sub">Pega enlaces de YouTube Music, descarga el archivo y sigue los pasos.</p>
     <button class="btn alt" id="install" data-install hidden type="button" style="margin-top:12px">Instalar app</button>
   </header>
@@ -152,6 +163,45 @@ textarea::placeholder,input::placeholder{color:var(--muted)}
   </section>
 
 </main>
+
+<dialog class="help" id="help" aria-labelledby="helpT">
+  <div class="help-head">
+    <h2 class="h2" id="helpT">Ayuda</h2>
+    <button class="btn quiet" id="helpClose" type="button">Cerrar</button>
+  </div>
+  <div class="help-body">
+    <h3>Una sola vez</h3>
+    <ol>
+      <li>Sube <code>index.html</code>, <code>icon-192.png</code> e <code>icon-512.png</code> al repositorio <b>Musica</b> de GitHub.</li>
+      <li>En el <b>ordenador</b>, abre Chrome y entra en <code>https://chicoalmeidabb.github.io/Musica/</code>.</li>
+      <li>Pulsa <b>Instalar app</b>. Tendrás el icono en el Escritorio.</li>
+    </ol>
+    <h3>Cada vez que quieras música</h3>
+    <ol>
+      <li>Abre la app con su icono.</li>
+      <li>En YouTube Music, copia los enlaces de las canciones.</li>
+      <li>Pégalos aquí, uno por línea, y pulsa <b>Añadir a la lista</b>.</li>
+      <li>Pulsa <b>Descargar musica.bat</b> y elige <b>Conservar</b> si Chrome avisa.</li>
+      <li>En <b>Descargas</b>, haz doble clic en el <code>musica.bat</code> nuevo.</li>
+      <li>Espera a que ponga <b>“Terminado”</b> y pulsa una tecla.</li>
+      <li>Conecta el iPod y abre <b>iTunes</b>.</li>
+      <li><b>Archivo → Añadir carpeta a la biblioteca</b> → <code>Musica iPod</code> → <code>MP3</code>.</li>
+      <li>En <b>Añadido recientemente</b>, selecciona las canciones nuevas y <b>arrástralas a Correr</b>.</li>
+      <li>Pulsa <b>Expulsar</b> (el triángulo) y desenchufa el iPod.</li>
+      <li>Doble clic en <code>limpiar.bat</code> (en <code>Musica iPod</code>) y escribe <b>S</b>.</li>
+      <li>Aquí, pulsa <b>Empezar una tanda nueva</b>.</li>
+    </ol>
+    <h3>Consejos</h3>
+    <ul>
+      <li>La descarga solo funciona en el <b>ordenador Windows</b>. Desde la tablet solo preparas la lista.</li>
+      <li>Pega solo enlaces de canciones. Si pegas una lista completa, aparece la etiqueta “Lista completa”.</li>
+      <li>Si la ventana negra da un error, haz una foto y pregunta.</li>
+    </ul>
+    <p class="help-note">No ejecutes <b>limpiar.bat</b> antes de terminar de arrastrar las canciones al iPod, o las perderás.</p>
+    <p class="foot" style="margin-top:14px">Música iPod v1.2</p>
+  </div>
+</dialog>
+
 
 <script>
 (function(){
@@ -388,6 +438,15 @@ textarea::placeholder,input::placeholder{color:var(--muted)}
   $("install").addEventListener("click", function(){
     if(window.__ip){ window.__ip.prompt(); }
   });
+
+  var dlg = $("help");
+  $("helpBtn").addEventListener("click", function(){
+    if(dlg.showModal){ dlg.showModal(); } else { dlg.setAttribute("open",""); }
+  });
+  $("helpClose").addEventListener("click", function(){
+    if(dlg.close){ dlg.close(); } else { dlg.removeAttribute("open"); }
+  });
+  dlg.addEventListener("click", function(e){ if(e.target === dlg && dlg.close){ dlg.close(); } });
 
   load();
   render();
