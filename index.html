@@ -105,6 +105,8 @@ dialog.help::backdrop{background:rgba(0,0,0,.55)}
 .help-body ol,.help-body ul{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px}
 .help-body li{line-height:1.4}
 .help-body code{background:var(--accent-soft);padding:1px 6px;border-radius:6px;font-size:14px}
+.ytlink{flex:none;display:inline-flex;align-items:center;min-height:40px;padding:0 12px;border:1px solid var(--accent);border-radius:10px;color:var(--accent);font-size:14px;font-weight:600;text-decoration:none}
+.ytlink:hover{background:var(--accent-soft)}
 .help-body a{color:var(--accent);text-decoration:underline}
 .help-note{margin-top:14px;padding:10px 12px;border-radius:10px;background:var(--warn-bg);color:var(--warn);font-size:14px}
 </style>
@@ -113,7 +115,7 @@ dialog.help::backdrop{background:rgba(0,0,0,.55)}
 <main class="wrap">
 
   <header>
-    <div class="brand"><img class="logo" src="icon-192.png" alt="" width="56" height="56"><div><h1 class="h1">Música iPod</h1><span class="ver" id="ver">v1.3</span></div><button class="helpbtn" id="helpBtn" type="button" aria-haspopup="dialog">Ayuda</button></div>
+    <div class="brand"><img class="logo" src="icon-192.png" alt="" width="56" height="56"><div><h1 class="h1">Música iPod</h1><span class="ver" id="ver">v1.4</span></div><button class="helpbtn" id="helpBtn" type="button" aria-haspopup="dialog">Ayuda</button></div>
     <p class="sub">Pega enlaces de YouTube Music, descarga el archivo y sigue los pasos.</p>
     <button class="btn alt" id="install" data-install hidden type="button" style="margin-top:12px">Instalar app</button>
   </header>
@@ -124,7 +126,10 @@ dialog.help::backdrop{background:rgba(0,0,0,.55)}
   </section>
 
   <section class="card" aria-labelledby="addT">
-    <h2 class="h2" id="addT">Añadir canciones</h2>
+    <div class="card-head">
+      <h2 class="h2" id="addT">Añadir canciones</h2>
+      <a class="ytlink" href="https://music.youtube.com" target="_blank" rel="noopener noreferrer">Abrir YouTube Music ↗</a>
+    </div>
     <label>Enlaces (uno por línea)
       <textarea id="links" placeholder="https://music.youtube.com/watch?v=..." spellcheck="false" autocomplete="off"></textarea>
     </label>
@@ -192,7 +197,7 @@ dialog.help::backdrop{background:rgba(0,0,0,.55)}
       <li>Si la ventana negra da un error, haz una foto y pregunta.</li>
     </ul>
     <p class="help-note">No ejecutes <b>limpiar.bat</b> antes de terminar de arrastrar las canciones al iPod, o las perderás.</p>
-    <p class="foot" style="margin-top:14px">Música iPod v1.3</p>
+    <p class="foot" style="margin-top:14px">Música iPod v1.4</p>
   </div>
 </dialog>
 
