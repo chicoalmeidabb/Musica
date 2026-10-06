@@ -85,7 +85,7 @@ textarea::placeholder,input::placeholder{color:var(--muted)}
 .empty{padding:6px 0;color:var(--muted)}
 
 .steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
-.step{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:10px;cursor:pointer}
+.step{display:flex;flex-direction:row;gap:12px;align-items:flex-start;padding:10px;border-radius:10px;cursor:pointer;font-weight:400}
 .step:hover{background:var(--accent-soft)}
 .step input{flex:none;width:22px;height:22px;margin:1px 0 0;accent-color:var(--accent)}
 .step.done .st{color:var(--muted);text-decoration:line-through}
@@ -121,7 +121,7 @@ a.btn{text-decoration:none}
 <main class="wrap">
 
   <header>
-    <div class="brand"><img class="logo" src="icon-192.png" alt="" width="56" height="56"><div><h1 class="h1">Música iPod</h1><span class="ver" id="ver">v1.10</span></div><button class="helpbtn" id="helpBtn" type="button" aria-haspopup="dialog">Ayuda</button></div>
+    <div class="brand"><img class="logo" src="icon-192.png" alt="" width="56" height="56"><div><h1 class="h1">Música iPod</h1><span class="ver" id="ver">v1.13</span></div><button class="helpbtn" id="helpBtn" type="button" aria-haspopup="dialog">Ayuda</button></div>
     <p class="sub">Pega enlaces de YouTube Music, descarga el archivo y sigue los pasos.</p>
     <button class="btn alt" id="install" data-install hidden type="button" style="margin-top:12px">Instalar app</button>
   </header>
@@ -172,28 +172,53 @@ a.btn{text-decoration:none}
     <button class="btn quiet" id="helpClose" type="button">Cerrar</button>
   </div>
   <div class="help-body">
-    <h3>Cómo conseguir tu música</h3>
+    <h3>1. Pega los enlaces</h3>
     <ol>
-      <li>Abre <a href="https://music.youtube.com" target="_blank" rel="noopener noreferrer"><b>YouTube Music</b></a>, busca la canción, pulsa <b>Compartir</b> y copia el enlace.</li>
-      <li>Vuelve aquí y pégalo en <b>Añadir canciones</b> (uno por línea). Pulsa <b>Añadir a la lista</b>.</li>
-      <li>En el paso 2, pulsa <b>Descargar lista</b> y elige <b>Conservar</b> si Chrome avisa.</li>
-      <li>Haz doble clic en el icono <b>“Musica bat”</b> de tu Escritorio.</li>
-      <li>Espera a que ponga <b>“Terminado”</b> y pulsa una tecla.</li>
-      <li>Conecta el iPod y abre <b>iTunes</b>.</li>
-      <li><b>Archivo → Añadir carpeta a la biblioteca</b> → <code>Musica iPod</code> → <code>MP3</code>.</li>
-      <li>En <b>Añadido recientemente</b>, selecciona las canciones nuevas y <b>arrástralas a Correr</b>.</li>
+      <li>Pulsa <a href="https://music.youtube.com" target="_blank" rel="noopener noreferrer"><b>Abrir YouTube Music</b></a>.</li>
+      <li>Busca la canción, pulsa <b>Compartir</b> y copia el enlace.</li>
+      <li>Vuelve aquí y pégalo en <b>Añadir canciones</b>. Salta solo a la línea siguiente.</li>
+      <li>Pulsa <b>Añadir a la lista</b>. Verás las canciones en “Lista de esta tanda”.</li>
+    </ol>
+    <h3>2. Descarga tu lista</h3>
+    <ol>
+      <li>En el paso 2, pulsa <b>Descargar lista</b>.</li>
+      <li>Si Chrome o Windows avisan, elige <b>Conservar</b>.</li>
+    </ol>
+    <h3>3. Abre “Musica bat”</h3>
+    <ol>
+      <li>En el Escritorio, haz doble clic en el icono de la corredora, <b>“Musica bat”</b>.</li>
+      <li>Se abre una ventana negra. No la cierres mientras descarga.</li>
+      <li>Cuando ponga <b>“Terminado”</b>, pulsa una tecla.</li>
+      <li>Se abren solas la carpeta MP3 e iTunes, y las canciones entran en iTunes.</li>
+    </ol>
+    <h3>4. Pásalas al iPod</h3>
+    <ol>
+      <li>Conecta el iPod.</li>
+      <li>En iTunes, pulsa <b>Añadido recientemente</b>. Puede tardar unos segundos.</li>
+      <li>Selecciona las canciones nuevas y <b>arrástralas a Correr</b>, bajo el nombre del iPod.</li>
       <li>Pulsa <b>Expulsar</b> (el triángulo) y desenchufa el iPod.</li>
-      <li>Haz doble clic en el icono <b>“Limpiar bat”</b> del Escritorio y escribe <b>S</b>.</li>
+    </ol>
+    <h3>5. Limpia</h3>
+    <ol>
+      <li>Cuando las canciones ya estén en el iPod, haz doble clic en la papelera naranja, <b>“Limpiar bat”</b>.</li>
+      <li>Escribe <b>S</b> y pulsa Enter.</li>
       <li>Aquí, pulsa <b>Empezar una tanda nueva</b>.</li>
     </ol>
-    <h3>Consejos</h3>
+    <p class="help-note">No uses “Limpiar bat” antes de terminar de arrastrar las canciones al iPod, o las perderás.</p>
+    <h3>Si algo falla</h3>
     <ul>
-      <li>La descarga solo funciona en el <b>ordenador Windows</b>. Desde la tablet solo preparas la lista.</li>
-      <li>Pega solo enlaces de canciones. Si pegas una lista completa, aparece la etiqueta “Lista completa”.</li>
-      <li>Si la ventana negra da un error, haz una foto y pregunta.</li>
+      <li><b>No aparecen en iTunes:</b> usa <b>Archivo → Añadir carpeta a la biblioteca</b> → <code>Musica iPod</code> → <code>MP3</code>.</li>
+      <li><b>Salen canciones repetidas:</b> quedaron MP3 de una tanda anterior. Usa “Limpiar bat” al terminar cada vez.</li>
+      <li><b>iTunes avisa del error 11222:</b> pulsa OK. Es un fallo de conexión con la tienda y no afecta a tu música.</li>
+      <li><b>Pegaste una lista completa:</b> aparece la etiqueta “Lista completa” y se bajan todas sus canciones.</li>
+      <li><b>La ventana negra da un error:</b> haz una foto y pregunta.</li>
     </ul>
-    <p class="help-note">No ejecutes <b>limpiar.bat</b> antes de terminar de arrastrar las canciones al iPod, o las perderás.</p>
-    <p class="foot" style="margin-top:14px">Música iPod v1.10</p>
+    <h3>Importante</h3>
+    <ul>
+      <li>La descarga solo funciona en el <b>ordenador Windows</b>. Desde la tablet solo puedes preparar la lista.</li>
+      <li>Cada vez que añadas canciones nuevas, vuelve a pulsar <b>Descargar lista</b>.</li>
+    </ul>
+    <p class="foot" style="margin-top:14px">Música iPod v1.13</p>
   </div>
 </dialog>
 
@@ -328,29 +353,29 @@ a.btn{text-decoration:none}
     var d = state.dest || "Correr";
     var has = state.items.length > 0;
     return [
-      { t:"Pega el enlace de YouTube Music",
-        s:"Copia el enlace de la canción y pégalo arriba, en “Añadir canciones”.",
+      { t:"Pega los enlaces de YouTube Music",
+        s:"Abre YouTube Music, pulsa Compartir y copia el enlace. Pégalo arriba, en “Añadir canciones”, y pulsa “Añadir a la lista”.",
         acts:[ { label:"Abrir YouTube Music ↗", href:"https://music.youtube.com" } ] },
-      { t:"Descarga tu lista de canciones",
-        s:"Guarda tus canciones en un archivo (musica.bat). El icono del Escritorio lo usa para saber qué bajar. Si el navegador avisa, elige “Conservar”.",
+      { t:"Descarga tu lista",
+        s:"Guarda tus canciones en un archivo para el icono del Escritorio. Si el navegador avisa, elige “Conservar”.",
         acts:[ { label:"Descargar lista", primary:true, disabled:!has, done:true, fn:function(){
                   download("musica.bat", buildBat());
-                  showMsg("ok","Descargado musica.bat. Ahora haz doble clic en el icono “Musica bat” de tu Escritorio."); } },
+                  showMsg("ok","Lista descargada. Ahora haz doble clic en el icono “Musica bat” de tu Escritorio."); } },
                { label:"Copiar enlaces", quiet:true, disabled:!has, fn:function(){
                   copyText(state.items.map(function(i){ return i.url; }).join("\n"))
                     .then(function(){ showMsg("ok","Enlaces copiados."); })
                     .catch(function(){ showMsg("bad","No se pudo copiar."); }); } } ] },
-      { t:"Haz doble clic en el icono “Musica bat”",
+      { t:"Abre “Musica bat”",
         img:"icon-192.png",
-        s:"Ábrelo desde tu Escritorio (el icono de la corredora). Se abre una ventana negra: espera a que ponga “Terminado” y pulsa una tecla. Se abrirán solas la carpeta MP3 e iTunes.",
+        s:"Haz doble clic en el icono de la corredora de tu Escritorio. Se abre una ventana negra: espera a que ponga “Terminado” y pulsa una tecla. Las canciones entran solas en iTunes.",
         acts:[ { label:"Ya ha terminado", done:true, fn:function(){} } ] },
       { t:"Pásalas al iPod",
-        s:"En iTunes: Archivo → Añadir carpeta a la biblioteca → Musica iPod → MP3. Después, en “Añadido recientemente”, arrástralas a “" + d + "” y pulsa Expulsar.",
+        s:"Conecta el iPod. En iTunes, pulsa “Añadido recientemente”, arrastra las canciones nuevas a “" + d + "” y pulsa Expulsar antes de desenchufar.",
         acts:[ { label:"Abrir iTunes", href:"itunes://" },
                { label:"Ya están en el iPod", done:true, fn:function(){} } ] },
-      { t:"Haz doble clic en el icono “Limpiar bat”",
+      { t:"Abre “Limpiar bat”",
         img:"data:image/png;base64,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",
-        s:"Cuando ya tengas las canciones en el iPod, abre la papelera naranja del Escritorio, escribe S y pulsa Enter. Después empieza una tanda nueva.",
+        s:"Solo cuando las canciones ya estén en el iPod: haz doble clic en la papelera naranja del Escritorio, escribe S y pulsa Enter. Después pulsa “Empezar una tanda nueva”.",
         acts:[ { label:"Ya está limpio", done:true, fn:function(){} } ] }
     ];
   }
@@ -436,7 +461,14 @@ a.btn{text-decoration:none}
       L.push("yt-dlp " + opts + ' "' + l.url + '"');
     });
     L.push("echo.");
-    L.push("echo Terminado. Abriendo la carpeta MP3 e iTunes...");
+    L.push("echo Terminado. Metiendo las canciones en iTunes...");
+    L.push('for /f "delims=" %%M in (\'powershell -nologo -command "[Environment]::GetFolderPath(\'MyMusic\')"\') do set "MUS=%%M"');
+    L.push('set "IT=%MUS%\\iTunes\\iTunes Media"');
+    L.push('set "ADD="');
+    L.push('for /d %%A in ("%IT%\\A?adir autom*") do set "ADD=%%A"');
+    L.push('for /d %%A in ("%IT%\\Automatically*") do set "ADD=%%A"');
+    L.push('if defined ADD (copy /y "%OUT%\\*.mp3" "%ADD%\\" >nul & echo Hecho: iTunes las anadira solas.) else echo No encuentro la carpeta de iTunes. Anade la carpeta MP3 a mano.');
+    L.push("echo Abriendo la carpeta MP3 e iTunes...");
     L.push('start "" "%OUT%"');
     L.push('if exist "%ProgramFiles%\\iTunes\\iTunes.exe" start "" "%ProgramFiles%\\iTunes\\iTunes.exe"');
     L.push("pause");
